@@ -1,0 +1,33 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MarsPredictionMarketFactory
+    network: bsc
+    source:
+      address: "0x7Cf1e5cDB2336EaDECB3e499D31a0a66Dd247fd7"
+      abi: MarsPredictionMarketFactory
+      startBlock: 8198265
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - CategoryUpdatedEvent
+        - MilestoneUpdatedEvent
+        - OutcomeChangedEvent
+        - PredictionMarketCreatedEvent
+      abis:
+        - name: MarsPredictionMarketFactory
+          file: ./abis/MarsPredictionMarketFactory.json
+      eventHandlers:
+        - event: CategoryUpdatedEvent(bytes16,uint8,string,string)
+          handler: handleCategoryUpdatedEvent
+        - event: MilestoneUpdatedEvent(bytes16,bytes16,uint8,string,string,uint8)
+          handler: handleMilestoneUpdatedEvent
+        - event: OutcomeChangedEvent(bytes16,address,uint8,string)
+          handler: handleOutcomeChangedEvent
+        - event: PredictionMarketCreatedEvent(bytes16,uint8,string,string,address,uint256,address)
+          handler: handlePredictionMarketCreatedEvent
+      file: ./src/mapping.ts

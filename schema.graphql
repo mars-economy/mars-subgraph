@@ -1,0 +1,46 @@
+type Category @entity {
+  id: ID!
+  position: Int! # uint8
+  name: String!
+  description: String
+}
+
+enum MilestoneStatus {
+  Historical
+  Current
+  Future
+}
+
+type Milestone @entity {
+  id: ID!
+  category: Category!
+  position: Int! # uint8
+  name: String!
+  description: String
+  status: MilestoneStatus!
+}
+
+enum PredictionState {
+  Open
+  Settlement
+  Closed
+}
+
+type Prediction @entity {
+  id: ID!
+  milestone: Milestone!
+  position: Int! # uint8
+  name: String!
+  description: String
+  state: PredictionState!
+  token: Bytes!
+  dueDate: BigInt!
+  predictorsNumber: Int
+}
+
+type Outcome @entity {
+  id: ID!
+  prediction: Prediction!
+  position: Int! # uint8
+  name: String!
+}
