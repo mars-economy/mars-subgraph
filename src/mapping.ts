@@ -7,6 +7,8 @@ import {
   PredictionMarketCreatedEvent
 } from "../generated/MarsPredictionMarketFactory/MarsPredictionMarketFactory"
 import { Category, Milestone, Prediction, Outcome } from "../generated/schema"
+import { MarsPredictionMarket } from '../generated/templates'
+
 
 export function handleCategoryUpdatedEvent(event: CategoryUpdatedEvent): void {
 
@@ -27,12 +29,22 @@ export function handleMilestoneUpdatedEvent(
   milestoneStatus[1] = "Current"
   milestoneStatus[2] = "Future"
 
-  let entity = new Milestone(event.params.uuid.toHex())
+  var predictorsNumber = 0
+  var dueDate = BigInt.fromI32(0)
+  let entity = Milestone.load(event.params.uuid.toHex())
+  if(entity == null) {
+	entity = new Milestone(event.params.uuid.toHex())
+  } else {
+	  dueDate = entity.dueDate
+	  predictorsNumber = entity.predictorsNumber
+  }
 
   entity.category = Category.load(event.params.categoryUuid.toHex()).id
   entity.position = event.params.position
   entity.name = event.params.name
   entity.description = event.params.description
+  entity.predictorsNumber = predictorsNumber
+  entity.dueDate = dueDate
 
   entity.status = milestoneStatus[event.params.status]
 
@@ -46,6 +58,7 @@ export function handleOutcomeChangedEvent(event: OutcomeChangedEvent): void {
   entity.prediction = Prediction.load(event.params.predictionMarket.toHex()).id
   entity.position = event.params.position
   entity.name = event.params.name
+  entity.stakedAmount = BigInt.fromI32(0)
 
   entity.save()	
 }
@@ -55,8 +68,9 @@ export function handlePredictionMarketCreatedEvent(
 ): void {
 
   let entity = new Prediction(event.params.contractAddress.toHex())
+  let milestone = Milestone.load(event.params.milestoneUuid.toHex())
 
-  entity.milestone = Milestone.load(event.params.milestoneUuid.toHex()).id
+  entity.milestone = milestone.id
   entity.position = event.params.position
   entity.name = event.params.name
   entity.description = event.params.description
@@ -65,5 +79,10 @@ export function handlePredictionMarketCreatedEvent(
   entity.state = "Open"
   entity.predictorsNumber = 0
 
-  entity.save()	
+  entity.save()
+  
+  milestone.dueDate = entity.dueDate
+  milestone.save()
+
+  MarsPredictionMarket.create(event.params.contractAddress)
 }

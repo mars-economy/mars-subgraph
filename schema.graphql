@@ -18,6 +18,8 @@ type Milestone @entity {
   name: String!
   description: String
   status: MilestoneStatus!
+  dueDate: BigInt!
+  predictorsNumber: Int
 }
 
 enum PredictionState {
@@ -43,4 +45,5 @@ type Outcome @entity {
   prediction: Prediction!
   position: Int! # uint8
   name: String!
+  stakedAmount: BigInt!
 }

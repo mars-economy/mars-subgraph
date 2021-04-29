@@ -6,9 +6,9 @@ dataSources:
     name: MarsPredictionMarketFactory
     network: bsc
     source:
-      address: "0x7Cf1e5cDB2336EaDECB3e499D31a0a66Dd247fd7"
+      address: "0x7838c7a8d7285Adc612c87cA2b8b9BCd5eb3EBd9"
       abi: MarsPredictionMarketFactory
-      startBlock: 8198265
+      startBlock: 8400001
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -31,3 +31,22 @@ dataSources:
         - event: PredictionMarketCreatedEvent(bytes16,uint8,string,string,address,uint256,address)
           handler: handlePredictionMarketCreatedEvent
       file: ./src/mapping.ts
+templates:
+  - kind: ethereum/contract
+    name: MarsPredictionMarket
+    network: bsc
+    source:
+      abi: MarsPredictionMarket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Prediction
+      abis:
+        - name: MarsPredictionMarket
+          file: ./abis/MarsPredictionMarket.json
+      eventHandlers:
+        - event: PredictionEvent(indexed address,bytes16,uint256)
+          handler: handlePredictionEvent
+      file: ./src/market.ts
