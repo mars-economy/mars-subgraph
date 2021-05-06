@@ -59,6 +59,7 @@ export function handleOutcomeChangedEvent(event: OutcomeChangedEvent): void {
   entity.position = event.params.position
   entity.name = event.params.name
   entity.stakedAmount = BigInt.fromI32(0)
+  entity.winning = false
 
   entity.save()	
 }

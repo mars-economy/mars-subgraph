@@ -46,4 +46,5 @@ type Outcome @entity {
   position: Int! # uint8
   name: String!
   stakedAmount: BigInt!
+  winning: Boolean!
 }

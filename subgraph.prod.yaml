@@ -6,9 +6,9 @@ dataSources:
     name: MarsPredictionMarketFactory
     network: bsc
     source:
-      address: "0xC251D9F869D178Ce09E08fa830b35C0E850344F5"
+      address: "0x4738A391d7F8024F00c761278Ca2F2499A3eb3Db"
       abi: MarsPredictionMarketFactory
-      startBlock: 8607298
+      startBlock: 8569575
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -31,35 +31,6 @@ dataSources:
         - event: PredictionMarketCreatedEvent(bytes16,uint8,string,string,address,uint256,address)
           handler: handlePredictionMarketCreatedEvent
       file: ./src/mapping.ts
-  - kind: ethereum/contract
-    name: Settlement
-    network: bsc
-    source:
-      address: "0x26AcC450b275cf87255490Fe19b36693Ac67AeAD"
-      abi: Settlement
-      startBlock: 8607294
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - PotentialOracleEvent
-        - OracleAcceptedEvent
-        - OracleVotedEvent
-        - OutcomeDefinedEvent
-      abis:
-        - name: Settlement
-          file: ./abis/Settlement.json
-      eventHandlers:
-        - event: PotentialOracleEvent(address)
-          handler: handlePotentialOracleEvent
-        - event: OracleAcceptedEvent(address,uint256)
-          handler: handleOracleAcceptedEvent
-        - event: OracleVotedEvent(indexed address,indexed address,bytes16)
-          handler: handleOracleVotedEvent
-        - event: OutcomeDefinedEvent(indexed address,bytes16)
-          handler: handleOutcomeDefinedEvent
-      file: ./src/settlement.ts
 templates:
   - kind: ethereum/contract
     name: MarsPredictionMarket
